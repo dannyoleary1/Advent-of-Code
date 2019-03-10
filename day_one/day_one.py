@@ -12,14 +12,8 @@ def get_resulting_frequency(file_path):
     #Step 2. Read the input and add/subtract.
     with open(file_path) as f:
         for line in f:
-            current_frequency += check_operand(line)
+            current_frequency += int(line)
 
     return current_frequency
 
-def check_operand(current_op):
-    if current_op[0] is '+':
-        return int(current_op[1:])
-    else:
-        return int(current_op[1:]) * -1
-
-print(get_resulting_frequency("input.txt"))
+print(get_resulting_frequency("input.txt")) ##Expected output is 585
