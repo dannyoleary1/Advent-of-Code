@@ -16,7 +16,6 @@ def read_cordinates():
 def fill_locations(id, left_co_ord, top_co_ord, inches_wide, inches_tall):
     """Change the matrix at the specified cordinates."""
     global mult_id_count
-    control_for_id = True
     for i in range(inches_tall):
         for j in range(inches_wide):
             if check_matrix_square(left_co_ord+j, top_co_ord+i):

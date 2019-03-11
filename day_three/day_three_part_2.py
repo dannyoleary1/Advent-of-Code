@@ -1,0 +1,63 @@
+import fileinput
+
+width, height = 2000, 2000 #we now have a 1000 x 1000 range matrix. 
+matrix = [['.' for x in range(width)] for y in range(height)]
+mult_id_count = 0
+control_set = []
+
+def read_cordinates():
+    global mult_id_count
+    input = list(fileinput.input("input.txt"))
+    for line in input:
+        id, left_co_ord, top_co_ord, inches_wide, inches_tall = strip_line(line)
+        fill_locations(id, left_co_ord, top_co_ord, inches_wide, inches_tall)
+    return mult_id_count
+
+        
+def fill_locations(id, left_co_ord, top_co_ord, inches_wide, inches_tall):
+    """Change the matrix at the specified cordinates."""
+    global mult_id_count
+    global control_set
+    for i in range(inches_tall):
+        for j in range(inches_wide):
+            if check_matrix_square(left_co_ord+j, top_co_ord+i):
+                #It has an id already
+                if matrix[left_co_ord+j][top_co_ord+i] is not 'X':
+                    control_set.append(int(matrix[left_co_ord+j][top_co_ord+i]))
+                    control_set.append(int(id[1:]))
+                    matrix[left_co_ord+j][top_co_ord+i] = 'X'
+                    mult_id_count += 1
+                control_set.append(int(id[1:]))
+            else:
+                matrix[left_co_ord+j][top_co_ord+i] = id[1:]
+
+    
+
+def check_matrix_square(left_co_ord, top_co_ord):
+    """Checks if it has already been assigned an ID. Returns True if it has."""
+    if matrix[left_co_ord][top_co_ord] is '.':
+        return False
+    else: 
+        return True
+
+def strip_line(line):
+    line = line.split(" @ ")
+    id = (line[0])
+    line[1] = line[1].split(",")
+    left_co_ord = int(line[1][0])
+    line[1] = line[1][1].split(": ")
+    top_co_ord = int(line[1][0]) #This is messy, there's a better way.
+    line[1] = line[1][1].split("x")
+    inches_wide = int(line[1][0])
+    inches_tall = int(line[1][1])
+    return (id, left_co_ord, top_co_ord, inches_wide, inches_tall)
+
+def compare():
+    """This is a bad solution for this and should be improved eventually. A better idea would be to change the logic of how they're stored as X's to number counts."""
+    current_set = sorted(set(control_set))
+    return sum(range(current_set[0],current_set[-1]+1)) - sum(current_set)
+    
+
+
+print(read_cordinates())
+print(compare())
